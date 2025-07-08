@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>NICAAR - Agriculture & Climate Research</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- 3D Card CSS & Custom Styles -->
+    <style>
+        :root {
+            --primary: #388e3c;
+            --secondary: #f9fbe7;
+            --accent: #8bc34a;
+            --dark: #263238;
+            --light: #fff;
+            --shadow: 0 8px 24px rgba(56,142,60,0.15);
+        }
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #f9fbe7 0%, #e8f5e9 100%);
+            color: var(--dark);
+        }
+        header {
+            background: var(--primary);
+            color: var(--light);
+            box-shadow: var(--shadow);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+        .navbar .logo img {
+            height: 48px;
+            filter: drop-shadow(2px 2px 4px #222);
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .navbar a:hover {
+            color: var(--accent);
+        }
+        .banner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 3rem 2rem 2rem 2rem;
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            min-height: 400px;
+            color: var(--light);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .banner::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(56,142,60,0.65);
+            z-index: 1;
+        }
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+        .banner h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px #222;
+        }
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .banner .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+        .banner .btn {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 4px 16px rgba(76,175,80,0.15);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+        .banner .btn:hover {
+            background: var(--light);
+            color: var(--primary);
+            transform: translateY(-2px) scale(1.05);
+        }
+        /* Weather App */
+        .weather-map-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+            background: var(--secondary);
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .weather-app {
+            background: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(56,142,60,0.12);
+            padding: 2rem 2rem 1.5rem 2rem;
+            min-width: 300px;
+            max-width: 350px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .weather-app:hover {
+            transform: translateY(-6px) scale(1.03);
+        }
+        .weather-app .fa-cloud-sun {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .weather-app input[type="text"] {
+            width: 70%;
+            padding: 0.5rem;
+            border-radius: 20px;
+            border: 1px solid #cfd8dc;
+            margin-bottom: 1rem;
+            outline: none;
+            font-size: 1rem;
+        }
+        .weather-app button {
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: background 0.2s;
+        }
+        .weather-app button:hover {
+            background: var(--accent);
+            color: var(--dark);
+        }
+        .weather-result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+        .weather-result img {
+            width: 60px;
+            vertical-align: middle;
+        }
+        /* Map */
+        .map-container {
+            flex: 1 1 400px;
+            min-width: 320px;
+            max-width: 600px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(56,142,60,0.12);
+            background: var(--light);
+            height: 350px;
+            position: relative;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(0.2) contrast(1.1) brightness(1.05);
+        }
+        /* Objectives - 3D Cards */
+        .objectives-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+        .objectives-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .objectives-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .objective-card {
+            background: var(--light);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(56,142,60,0.13), 0 1.5px 8px rgba(76,175,80,0.09);
+            padding: 2rem 1.5rem;
+            width: 320px;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            perspective: 800px;
+            position: relative;
+        }
+        .objective-card:hover {
+            transform: rotateY(8deg) scale(1.04) translateY(-6px);
+            box-shadow: 0 16px 48px rgba(56,142,60,0.18);
+        }
+        .objective-card img {
+            width: 64px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 2px 8px #b2dfdb);
+        }
+        .objective-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.7rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .objective-card p {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+        .objective-card .readmore {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: auto;
+            transition: color 0.2s;
+        }
+        .objective-card .readmore:hover {
+            color: var(--primary);
+        }
+        /* Team Section */
+        .team-section {
+            background: linear-gradient(120deg, #e8f5e9 60%, #f9fbe7 100%);
+            padding: 3rem 2rem;
+        }
+        .team-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 2rem;
+        }
+        .team-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .team-card {
+            background: var(--light);
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(56,142,60,0.10);
+            width: 260px;
+            padding: 2rem 1.2rem 1.5rem 1.2rem;
+            text-align: center;
+            transition: transform 0.2s;
+            position: relative;
+        }
+        .team-card:hover {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 12px 32px rgba(56,142,60,0.16);
+        }
+        .team-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--accent);
+            box-shadow: 0 2px 8px #b2dfdb;
+        }
+        .team-card h4 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .team-card .role {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0.7rem;
+        }
+        .team-card .bio {
+            font-size: 0.95rem;
+            color: #444;
+            margin-bottom: 1rem;
+        }
+        .team-card .social {
+            display: flex;
+            gap: 0.7rem;
+            justify-content: center;
+        }
+        .team-card .social a {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+        }
+        .team-card .social a:hover {
+            color: var(--accent);
+        }
+        /* Contact Section */
+        .contact-section {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: var(--light);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2rem;
+        }
+        .contact-title {
+            font-size: 1.7rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .contact-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 16px;
+            border: 1px solid #cfd8dc;
+            font-size: 1rem;
+            margin-bottom: 0.7rem;
+            outline: none;
+            background: #f5f5f5;
+            transition: border 0.2s;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            border: 1.5px solid var(--primary);
+        }
+        .contact-form .form-group {
+            flex: 1 1 300px;
+            min-width: 220px;
+        }
+        .contact-form button {
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            border-radius: 20px;
+            padding: 0.7rem 2.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px #b2dfdb;
+        }
+        .contact-form button:hover {
+            background: var(--accent);
+            color: var(--dark);
+        }
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: var(--light);
+            padding: 2rem 0 1rem 0;
+            margin-top: 3rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+        }
+        .footer-col {
+            flex: 1 1 220px;
+            min-width: 180px;
+        }
+        .footer-col h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-family: 'Montserrat', sans-serif;
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .footer-col ul li {
+            margin-bottom: 0.7rem;
+        }
+        .footer-col ul a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-col ul a:hover {
+            color: var(--accent);
+        }
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .footer-social a {
+            color: var(--light);
+            font-size: 1.3rem;
+            transition: color 0.2s;
+        }
+        .footer-social a:hover {
+            color: var(--accent);
+        }
+        .footer-newsletter input {
+            width: 80%;
+            padding: 0.5rem;
+            border-radius: 16px;
+            border: none;
+            margin-bottom: 0.7rem;
+            font-size: 1rem;
+        }
+        .footer-newsletter button {
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            border-radius: 16px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .footer-newsletter button:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+        .copyright {
+            text-align: center;
+            color: #c8e6c9;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .objectives-cards, .team-cards, .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .weather-map-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .banner h1 {
+                font-size: 2rem;
+            }
+            .objectives-section, .team-section, .contact-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="https://img.icons8.com/color/96/000000/plant-under-sun.png" alt="NICAAR Logo">
+            </div>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#objectives">Objectives</a></li>
+                <li><a href="#weather">Weather</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Banner with Moving Texts (Animated Marquee) -->
+    <section class="banner" style="background: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;">
+        <div class="banner-content">
+            <h1>NICAAR: Agriculture & Climate Research</h1>
+            <p>
+                Advancing sustainable agriculture and climate adaptation in South Sudan and the Nile Basin. Empowering communities, supporting government, and fostering innovation for a greener future.
+            </p>
+            <div class="moving-texts-container">
+                <div class="moving-texts">
+                    <span>
+                        🌾 South Sudan faces a dire need for food security &nbsp; • &nbsp;
+                        NICAAR is committed to innovative agricultural solutions &nbsp; • &nbsp;
+                        Supporting farmers with research, training, and resources &nbsp; • &nbsp;
+                        Promoting climate-smart agriculture for resilience &nbsp; • &nbsp;
+                        Empowering women and youth in rural communities &nbsp; • &nbsp;
+                        Collaborating with government and international partners &nbsp; • &nbsp;
+                        Join us in the fight against hunger and poverty
+                    </span>
+                </div>
+            </div>
+            <div class="banner-extra-info">
+                <ul>
+                    <li><strong>Founded:</strong> December 2023, Juba, South Sudan</li>
+                    <li><strong>Focus:</strong> Food security, climate adaptation, rural development</li>
+                    <li><strong>Impact:</strong> Serving vulnerable communities in the Nile Basin</li>
+                    <li><strong>Vision:</strong> A hunger-free, climate-resilient South Sudan</li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <a href="#objectives" class="btn">Our Objectives</a>
+                <a href="#contact" class="btn">Contact Us</a>
+            </div>
+        </div>
+    </section>
+    <style>
+        .banner {
+            background: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat !important;
+            min-height: 420px;
+        }
+        .moving-texts-container {
+            width: 100%;
+            overflow: hidden;
+            margin: 1.2rem 0 1.5rem 0;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.13);
+            box-shadow: 0 2px 12px rgba(56,142,60,0.10);
+        }
+        .moving-texts {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee 28s linear infinite;
+            font-size: 1.08rem;
+            color: #fff;
+            font-weight: 500;
+            padding: 0.7rem 0.5rem;
+            letter-spacing: 0.5px;
+        }
+        .moving-texts span {
+            display: inline-block;
+            padding-right: 3rem;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .banner-extra-info {
+            background: rgba(255,255,255,0.18);
+            border-radius: 14px;
+            margin-bottom: 1.2rem;
+            padding: 0.7rem 1.2rem;
+            color: #fff;
+            font-size: 1.05rem;
+            box-shadow: 0 1px 8px rgba(56,142,60,0.08);
+        }
+        .banner-extra-info ul {
+            margin: 0;
+            padding: 0 0 0 1.2rem;
+            list-style: disc;
+        }
+        .banner-extra-info li {
+            margin-bottom: 0.3rem;
+        }
+        @media (max-width: 600px) {
+            .moving-texts {
+                font-size: 0.97rem;
+            }
+            .banner-extra-info {
+                font-size: 0.97rem;
+                padding: 0.5rem 0.7rem;
+            }
+        }
+    </style>
+    <!-- Weather Tracking System Section -->
+    <video autoplay muted loop playsinline id="agriBgVideo" style="position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:-1;">
+        <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+        <!-- Replace the above src with any royalty-free agriculture video URL if available -->
+        Your browser does not support the video tag.
+    </video>
+    <section class="weather-tracking-section" id="weather-tracking">
+        <div class="weather-tracking-title">Live Weather Tracking System</div>
+        <div class="weather-tracking-desc">
+            Our advanced weather tracking system provides real-time, hyperlocal weather data for Juba and the Nile Basin. Get detailed insights including temperature, humidity, wind, pressure, sunrise/sunset, and live radar. Stay informed and plan your agricultural activities with confidence.
+        </div>
+        <div class="weather-tracking-content">
+            <div class="weather-live-details" id="weatherLiveDetails">
+                <!-- Live weather details will appear here -->
+            </div>
+            <div class="weather-radar">
+                <iframe src="https://embed.windy.com/embed2.html?lat=4.85&lon=31.61&detailLat=4.85&detailLon=31.61&width=400&height=350&zoom=8&level=surface&overlay=rain&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=default&metricTemp=default&radarRange=-1" width="400" height="350" frameborder="0" title="Live Weather Radar"></iframe>
+                <a href="https://www.windy.com/4.85/31.61?4.85,31.61,8" target="_blank" class="weather-redirect-link">Track Live Weather Online &rarr;</a>
+            </div>
+        </div>
+    </section>
+    <style>
+    .weather-tracking-section {
+        max-width: 1200px;
+        margin: 3rem auto;
+        background: linear-gradient(120deg, #e8f5e9 60%, #f9fbe7 100%);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(56,142,60,0.13);
+        padding: 2.5rem 2rem 2rem 2rem;
+    }
+    .weather-tracking-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.1rem;
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1.5px;
+    }
+    .weather-tracking-desc {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #444;
+        margin-bottom: 2rem;
+    }
+    .weather-tracking-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .weather-live-details {
+        background: var(--light);
+        border-radius: 20px;
+        box-shadow: 0 4px 24px rgba(56,142,60,0.12);
+        padding: 2rem 2rem 1.5rem 2rem;
+        min-width: 320px;
+        max-width: 380px;
+        font-size: 1.1rem;
+        color: var(--dark);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .weather-live-details .weather-icon {
+        width: 80px;
+        margin-bottom: 1rem;
+    }
+    .weather-live-details .weather-main {
+        font-size: 1.3rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .weather-live-details .weather-desc {
+        font-size: 1.05rem;
+        color: #555;
+        margin-bottom: 1rem;
+    }
+    .weather-live-details .weather-extra {
+        width: 100%;
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.7rem 1.2rem;
+        font-size: 1rem;
+    }
+    .weather-radar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .weather-redirect-link {
+        margin-top: 1rem;
+        display: inline-block;
+        background: var(--primary);
+        color: var(--light);
+        border-radius: 20px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        box-shadow: 0 2px 8px #b2dfdb;
+    }
+    .weather-redirect-link:hover {
+        background: var(--accent);
+        color: var(--dark);
+    }
+    @media (max-width: 900px) {
+        .weather-tracking-content {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+    </style>
+    <script>
+    // Live Weather Tracking System
+    async function loadLiveWeather() {
+        const city = 'Juba';
+        const apiKey = 'b6907d289e10d714a6e88b30761fae22'; // OpenWeatherMap demo key
+        const url = `https://openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+        const detailsDiv = document.getElementById('weatherLiveDetails');
+        detailsDiv.innerHTML = 'Loading...';
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data.cod !== 200) {
+                detailsDiv.innerHTML = `<span style="color:red;">City not found.</span>`;
+                return;
+            }
+            const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+            const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+            detailsDiv.innerHTML = `
+                <img class="weather-icon" src="https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" alt="Weather">
+                <div class="weather-main">${data.weather[0].main}</div>
+                <div class="weather-desc">${data.weather[0].description}</div>
+                <div class="weather-extra">
+                    <div><strong>🌡️ Temp:</strong> ${data.main.temp}°C</div>
+                    <div><strong>💧 Humidity:</strong> ${data.main.humidity}%</div>
+                    <div><strong>💨 Wind:</strong> ${data.wind.speed} m/s</div>
+                    <div><strong>🌬️ Pressure:</strong> ${data.main.pressure} hPa</div>
+                    <div><strong>🌅 Sunrise:</strong> ${sunrise}</div>
+                    <div><strong>🌇 Sunset:</strong> ${sunset}</div>
+                    <div><strong>📍 Location:</strong> ${data.name}, ${data.sys.country}</div>
+                    <div><strong>🧭 Wind Dir:</strong> ${data.wind.deg}&deg;</div>
+                </div>
+            `;
+        } catch (e) {
+            detailsDiv.innerHTML = `<span style="color:red;">Error fetching live weather.</span>`;
+        }
+    }
+    window.addEventListener('DOMContentLoaded', loadLiveWeather);
+    </script>
+
+    <!-- Map -->
+    <div class="map-container" style="width:100%; max-width:100%; height:450px;">
+        <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=31.6010%2C4.8410%2C31.6130%2C4.8490&amp;layer=mapnik&amp;marker=4.8450,31.6070"
+            style="border:1px solid #388e3c; width:100%; height:100%;"></iframe>
+    </div>
+</section>
+    <!-- Objectives Section -->
+    <section class="objectives-section" id="objectives">
+        <div class="objectives-title">Our Objectives</div>
+        <div class="objectives-cards">
+            <div class="objective-card">
+                <img src="https://img.icons8.com/color/96/000000/tractor.png" alt="Support Government">
+                <h3>Support Government</h3>
+                <p>Collaborate with national and local governments to promote gender equality, social inclusion, and economic growth in agriculture.</p>
+                <a href="#" class="readmore">Read More</a>
+            </div>
+            <div class="objective-card">
+                <img src="https://img.icons8.com/color/96/000000/plant-under-sun.png" alt="Agricultural Transformation">
+                <h3>Agricultural Transformation</h3>
+                <p>Drive innovation in agri-food systems, climate adaptation, and sustainable farming practices for resilient communities.</p>
+                <a href="#" class="readmore">Read More</a>
+            </div>
+            <div class="objective-card">
+                <img src="https://img.icons8.com/color/96/000000/women-group.png" alt="Women and Youth Engagement">
+                <h3>Women & Youth Engagement</h3>
+                <p>Empower youth and women in environmental conservation, natural resource management, and agricultural entrepreneurship.</p>
+                <a href="#" class="readmore">Read More</a>
+            </div>
+            <div class="objective-card">
+                <img src="https://img.icons8.com/color/96/000000/gardening.png" alt="Garden Maintenance">
+                <h3>Garden Maintenance</h3>
+                <p>Promote sustainable gardening and agroforestry to enhance food security and environmental health.</p>
+                <a href="#" class="readmore">Read More</a>
+            </div>
+            <div class="objective-card">
+                <img src="https://img.icons8.com/color/96/000000/eco-care.png" alt="Sustainable Environment">
+                <h3>Sustainable Environment</h3>
+                <p>Create a conducive environment for research, innovation, and sustainable economic development in South Sudan.</p>
+                <a href="#" class="readmore">Read More</a>
+            </div>
+            <div class="objective-card">
+                <img src="https://img.icons8.com/color/96/000000/handshake.png" alt="Cooperation with Government">
+                <h3>Cooperation with Government</h3>
+                <p>Foster partnerships with public and private sectors to advance agricultural research and climate adaptation.</p>
+                <a href="#" class="readmore">Read More</a>
+            </div>
+        </div>
+    </section>
+    <!-- Team Section -->
+    <section class="team-section" id="team">
+        <div class="team-title">Meet Our Dedicated Team</div>
+        <div class="team-cards">
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Makur Achuoth">
+                <h4>Mr Makur Achuoth</h4>
+                <div class="role">CEO, Agriculture & Climate Consultant</div>
+                <div class="bio">PhD candidate in Agriculture (Climate Change Adaptation), UNISA. MSc in Agricultural Science. Passionate about sustainable development.</div>
+                <div class="social">
+                    <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane Doe">
+                <h4>Jane Doe</h4>
+                <div class="role">Research Lead</div>
+                <div class="bio">Expert in agri-food systems and rural development. Leads research on climate adaptation strategies.</div>
+                <div class="social">
+                    <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="John Smith">
+                <h4>John Smith</h4>
+                <div class="role">Field Coordinator</div>
+                <div class="bio">Coordinates field projects and community engagement for sustainable agriculture in South Sudan.</div>
+                <div class="social">
+                    <a href="https://facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Mary Atong">
+                <h4>Mary Atong</h4>
+                <div class="role">Youth & Women Engagement</div>
+                <div class="bio">Empowers women and youth in agriculture and environmental conservation initiatives.</div>
+                <div class="social">
+                    <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- E-Commerce Section -->
+    <section class="ecommerce-section" id="store">
+        <div class="ecommerce-title">Agricultural Store</div>
+        <div class="ecommerce-desc">
+            Browse and purchase high-quality seeds and agricultural products. Click "Buy Now" to visit our secure store.
+        </div>
+        <div class="ecommerce-products">
+            <div class="product-card">
+                <img src="https://img.icons8.com/color/96/000000/corn.png" alt="Maize Seeds">
+                <h4>Maize Seeds</h4>
+                <p>High-yield hybrid maize seeds for all climates.</p>
+                <div class="price">$12.00 / kg</div>
+                <a href="https://yourstore.example.com/maize-seeds" target="_blank" class="buy-btn">Buy Now</a>
+            </div>
+            <div class="product-card">
+                <img src="https://img.icons8.com/color/96/000000/rice-bowl.png" alt="Rice Seeds">
+                <h4>Rice Seeds</h4>
+                <p>Premium paddy rice seeds for sustainable farming.</p>
+                <div class="price">$15.00 / kg</div>
+                <a href="https://yourstore.example.com/rice-seeds" target="_blank" class="buy-btn">Buy Now</a>
+            </div>
+            <div class="product-card">
+                <img src="https://img.icons8.com/color/96/000000/beans.png" alt="Bean Seeds">
+                <h4>Bean Seeds</h4>
+                <p>Nutritious bean seeds for healthy harvests.</p>
+                <div class="price">$10.00 / kg</div>
+                <a href="https://yourstore.example.com/bean-seeds" target="_blank" class="buy-btn">Buy Now</a>
+            </div>
+            <div class="product-card">
+                <img src="https://img.icons8.com/color/96/000000/fertilizer.png" alt="Organic Fertilizer">
+                <h4>Organic Fertilizer</h4>
+                <p>Eco-friendly fertilizer for improved soil health.</p>
+                <div class="price">$8.00 / bag</div>
+                <a href="https://yourstore.example.com/organic-fertilizer" target="_blank" class="buy-btn">Buy Now</a>
+            </div>
+        </div>
+        <div class="ecommerce-form-title">Join Our Customer List</div>
+        <form class="ecommerce-form" id="customerForm">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="text" name="phone" placeholder="Phone Number">
+            <input type="text" name="location" placeholder="Location">
+            <button type="submit">Submit</button>
+            <div class="form-message" id="formMessage"></div>
+        </form>
+    </section>
+    <style>
+    .ecommerce-section {
+        max-width: 1200px;
+        margin: 3rem auto;
+        background: linear-gradient(120deg, #f9fbe7 60%, #e8f5e9 100%);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(56,142,60,0.13);
+        padding: 2.5rem 2rem 2rem 2rem;
+    }
+    .ecommerce-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.1rem;
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1.5px;
+    }
+    .ecommerce-desc {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #444;
+        margin-bottom: 2rem;
+    }
+    .ecommerce-products {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+    }
+    .product-card {
+        background: var(--light);
+        border-radius: 20px;
+        box-shadow: 0 4px 24px rgba(56,142,60,0.10);
+        width: 250px;
+        padding: 1.5rem 1rem 1.2rem 1rem;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-card:hover {
+        transform: translateY(-6px) scale(1.04);
+        box-shadow: 0 12px 32px rgba(56,142,60,0.16);
+    }
+    .product-card img {
+        width: 64px;
+        margin-bottom: 1rem;
+        filter: drop-shadow(0 2px 8px #b2dfdb);
+    }
+    .product-card h4 {
+        font-size: 1.1rem;
+        color: var(--primary);
+        margin-bottom: 0.3rem;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .product-card p {
+        font-size: 0.97rem;
+        color: #444;
+        margin-bottom: 0.7rem;
+    }
+    .product-card .price {
+        font-size: 1.05rem;
+        color: var(--accent);
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+    .buy-btn {
+        background: var(--primary);
+        color: var(--light);
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        margin-top: auto;
+    }
+    .buy-btn:hover {
+        background: var(--accent);
+        color: var(--dark);
+    }
+    .ecommerce-form-title {
+        font-size: 1.2rem;
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 1rem;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .ecommerce-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        align-items: flex-end;
+        margin-bottom: 0.5rem;
+    }
+    .ecommerce-form input {
+        padding: 0.7rem;
+        border-radius: 16px;
+        border: 1px solid #cfd8dc;
+        font-size: 1rem;
+        background: #f5f5f5;
+        min-width: 180px;
+        outline: none;
+        transition: border 0.2s;
+    }
+    .ecommerce-form input:focus {
+        border: 1.5px solid var(--primary);
+    }
+    .ecommerce-form button {
+        background: var(--accent);
+        color: var(--dark);
+        border: none;
+        border-radius: 16px;
+        padding: 0.7rem 2rem;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s;
+        box-shadow: 0 2px 8px #b2dfdb;
+    }
+    .ecommerce-form button:hover {
+        background: var(--primary);
+        color: var(--light);
+    }
+    .form-message {
+        width: 100%;
+        text-align: center;
+        margin-top: 0.7rem;
+        font-size: 1rem;
+        color: var(--primary);
+    }
+    @media (max-width: 900px) {
+        .ecommerce-products {
+            flex-direction: column;
+            align-items: center;
+        }
+        .ecommerce-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+    </style>
+    <script>
+    // Simulate storing customer info (replace with real backend/database in production)
+    document.getElementById('customerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = this.name.value.trim();
+        const email = this.email.value.trim();
+        const phone = this.phone.value.trim();
+        const location = this.location.value.trim();
+        // Example: Send to a database endpoint (replace URL with your backend)
+        fetch('https://your-backend.example.com/api/customers', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ name, email, phone, location })
+        })
+        .then(res => res.ok ? res.json() : Promise.reject())
+        .then(() => {
+            document.getElementById('formMessage').textContent = 'Thank you! Your info has been received.';
+            document.getElementById('customerForm').reset();
+        })
+        .catch(() => {
+            document.getElementById('formMessage').textContent = 'Error submitting form. Please try again.';
+        });
+    });
+    </script>
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="contact-title">Request an Appointment</div>
+        <form class="contact-form">
+            <div class="form-group">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number">
+            </div>
+            <div class="form-group">
+                <textarea rows="6" placeholder="Message" required></textarea>
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+                <button type="submit">Send</button>
+            </div>
+        </form>
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Konyokonyo, Juba, South Sudan</li>
+                    <li><i class="fas fa-phone"></i> (+211) 916 346 822</li>
+                    <li><i class="fas fa-envelope"></i> Nileresearch24@gmail.com</li>
+                </ul>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#objectives">Objectives</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#weather">Weather</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>About Us</h4>
+                <p>
+                    NICAAR is a South Sudan-based private agricultural, rural development, and climate research institute. Founded in December 2023, we drive innovation for a sustainable future.
+                </p>
+            </div>
+            <div class="footer-col footer-newsletter">
+                <h4>Newsletter</h4>
+                <input type="email" placeholder="Enter Your Email">
+                <button>Subscribe</button>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2024 All Rights Reserved. Design by M@ch
+        </div>
+    </footer>
+    <!-- Weather App Script -->
+    <script>
+        async function getWeather() {
+            const city = document.getElementById('cityInput').value || 'Juba';
+            const apiKey = 'b6907d289e10d714a6e88b30761fae22'; // OpenWeatherMap demo key
+            const url = `https://openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+            const resultDiv = document.getElementById('weatherResult');
+            resultDiv.innerHTML = 'Loading...';
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if (data.cod !== 200) {
+                    resultDiv.innerHTML = `<span style="color:red;">City not found.</span>`;
+                    return;
+                }
+                resultDiv.innerHTML = `
+                    <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="Weather">
+                    <div><strong>${data.name}</strong></div>
+                    <div>${data.weather[0].main} (${data.weather[0].description})</div>
+                    <div>🌡️ ${data.main.temp}°C</div>
+                    <div>💧 Humidity: ${data.main.humidity}%</div>
+                    <div>💨 Wind: ${data.wind.speed} m/s</div>
+                `;
+            } catch (e) {
+                resultDiv.innerHTML = `<span style="color:red;">Error fetching weather.</span>`;
+            }
+        }
+        // Load default weather for Juba
+        window.onload = getWeather;
+    </script>
+</body>
+</html>
+<!-- Customer Authentication & Admin Panel Application -->
+<!-- 1. App Container -->
+<div id="app-root"></div>
+<style>
+/* App Modal Styles */
+#app-root .modal-bg {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(40,60,40,0.25); z-index: 9999; display: flex; align-items: center; justify-content: center;
+}
+#app-root .modal {
+    background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(56,142,60,0.18);
+    padding: 2rem 2.5rem; min-width: 320px; max-width: 95vw; position: relative;
+    animation: modalIn 0.2s;
+}
+@keyframes modalIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+#app-root .modal-close {
+    position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #388e3c; cursor: pointer;
+}
+#app-root .tab-group {
+    display: flex; gap: 1.5rem; margin-bottom: 1.5rem; justify-content: center;
+}
+#app-root .tab-btn {
+    background: #e8f5e9; color: #388e3c; border: none; border-radius: 14px 14px 0 0; padding: 0.7rem 2rem; font-weight: 500; cursor: pointer;
+    font-size: 1.05rem; transition: background 0.2s, color 0.2s;
+}
+#app-root .tab-btn.active, #app-root .tab-btn:hover {
+    background: #388e3c; color: #fff;
+}
+#app-root .form-group { margin-bottom: 1rem; }
+#app-root input, #app-root textarea {
+    width: 100%; padding: 0.7rem; border-radius: 12px; border: 1px solid #cfd8dc; font-size: 1rem; background: #f5f5f5; outline: none;
+    transition: border 0.2s;
+}
+#app-root input:focus, #app-root textarea:focus { border: 1.5px solid #388e3c; }
+#app-root .submit-btn {
+    background: #8bc34a; color: #263238; border: none; border-radius: 16px; padding: 0.7rem 2rem; font-weight: 500; font-size: 1rem; cursor: pointer;
+    transition: background 0.2s;
+}
+#app-root .submit-btn:hover { background: #388e3c; color: #fff; }
+#app-root .form-message { margin: 0.7rem 0; text-align: center; font-size: 1rem; }
+#app-root .admin-table {
+    width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.98rem;
+}
+#app-root .admin-table th, #app-root .admin-table td {
+    border: 1px solid #e0e0e0; padding: 0.6rem 0.5rem; text-align: left;
+}
+#app-root .admin-table th { background: #e8f5e9; color: #388e3c; }
+#app-root .admin-table tr:nth-child(even) { background: #f9fbe7; }
+#app-root .admin-action-btn {
+    background: #388e3c; color: #fff; border: none; border-radius: 10px; padding: 0.3rem 1rem; font-size: 0.95rem; cursor: pointer;
+    margin-right: 0.5rem; transition: background 0.2s;
+}
+#app-root .admin-action-btn:hover { background: #8bc34a; color: #263238; }
+#app-root .admin-logout {
+    background: none; border: none; color: #388e3c; font-size: 1.1rem; cursor: pointer; float: right; margin-top: -1.5rem;
+}
+@media (max-width: 600px) {
+    #app-root .modal { padding: 1rem 0.5rem; min-width: 90vw; }
+    #app-root .tab-btn { padding: 0.5rem 1rem; font-size: 0.97rem; }
+    #app-root .admin-table th, #app-root .admin-table td { font-size: 0.93rem; }
+}
+</style>
+<script>
+// --- Simple Local "Database" using localStorage ---
+const DB_KEY = 'nicaar_app_db_v1';
+function getDB() {
+    let db = localStorage.getItem(DB_KEY);
+    if (!db) {
+        db = { customers: [], admins: [{username:'admin', password:'admin123'}], logs: [] };
+        localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+    return JSON.parse(localStorage.getItem(DB_KEY));
+}
+function setDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+function addCustomer(customer) {
+    const db = getDB();
+    db.customers.push({...customer, id: Date.now()});
+    db.logs.push({type:'signup', user:customer.email, time:new Date().toISOString()});
+    setDB(db);
+}
+function getCustomers() { return getDB().customers; }
+function addLog(log) {
+    const db = getDB();
+    db.logs.push(log);
+    setDB(db);
+}
+function checkAdmin(username, password) {
+    const db = getDB();
+    return db.admins.some(a => a.username === username && a.password === password);
+}
+function removeCustomer(id) {
+    const db = getDB();
+    db.customers = db.customers.filter(c => c.id !== id);
+    db.logs.push({type:'delete', user:id, time:new Date().toISOString()});
+    setDB(db);
+}
+// --- Modal App UI ---
+function showAppModal(tab='signup') {
+    const root = document.getElementById('app-root');
+    root.innerHTML = `
+    <div class="modal-bg" id="modalBg">
+      <div class="modal" id="modalMain">
+        <button class="modal-close" onclick="closeAppModal()">&times;</button>
+        <div class="tab-group">
+            <button class="tab-btn${tab==='signup'?' active':''}" onclick="switchAppTab('signup')">Sign Up</button>
+            <button class="tab-btn${tab==='signin'?' active':''}" onclick="switchAppTab('signin')">Sign In</button>
+            <button class="tab-btn${tab==='admin'?' active':''}" onclick="switchAppTab('admin')">Admin</button>
+        </div>
+        <div id="modalTabContent"></div>
+      </div>
+    </div>
+    `;
+    renderTab(tab);
+}
+function closeAppModal() { document.getElementById('app-root').innerHTML = ''; }
+function switchAppTab(tab) { renderTab(tab); }
+function renderTab(tab) {
+    const content = document.getElementById('modalTabContent');
+    if (!content) return;
+    if (tab === 'signup') {
+        content.innerHTML = `
+        <form id="signupForm">
+            <div class="form-group"><input type="text" name="name" placeholder="Full Name" required></div>
+            <div class="form-group"><input type="email" name="email" placeholder="Email" required></div>
+            <div class="form-group"><input type="password" name="password" placeholder="Password" required></div>
+            <div class="form-group"><input type="text" name="phone" placeholder="Phone"></div>
+            <div class="form-group"><input type="text" name="location" placeholder="Location"></div>
+            <button class="submit-btn" type="submit">Sign Up</button>
+            <div class="form-message" id="signupMsg"></div>
+        </form>`;
+        document.getElementById('signupForm').onsubmit = function(e) {
+            e.preventDefault();
+            const f = this;
+            const customer = {
+                name: f.name.value.trim(),
+                email: f.email.value.trim(),
+                password: f.password.value,
+                phone: f.phone.value.trim(),
+                location: f.location.value.trim()
+            };
+            if (getCustomers().some(c => c.email === customer.email)) {
+                document.getElementById('signupMsg').textContent = 'Email already registered.';
+                return;
+            }
+            addCustomer(customer);
+            document.getElementById('signupMsg').textContent = 'Registration successful! You can now sign in.';
+            f.reset();
+        };
+    } else if (tab === 'signin') {
+        content.innerHTML = `
+        <form id="signinForm">
+            <div class="form-group"><input type="email" name="email" placeholder="Email" required></div>
+            <div class="form-group"><input type="password" name="password" placeholder="Password" required></div>
+            <button class="submit-btn" type="submit">Sign In</button>
+            <div class="form-message" id="signinMsg"></div>
+        </form>`;
+        document.getElementById('signinForm').onsubmit = function(e) {
+            e.preventDefault();
+            const email = this.email.value.trim();
+            const password = this.password.value;
+            const user = getCustomers().find(c => c.email === email && c.password === password);
+            if (user) {
+                addLog({type:'login', user:email, time:new Date().toISOString()});
+                document.getElementById('signinMsg').textContent = 'Sign in successful. Welcome, ' + user.name + '!';
+            } else {
+                document.getElementById('signinMsg').textContent = 'Invalid credentials.';
+            }
+        };
+    } else if (tab === 'admin') {
+        content.innerHTML = `
+        <form id="adminLoginForm">
+            <div class="form-group"><input type="text" name="username" placeholder="Admin Username" required></div>
+            <div class="form-group"><input type="password" name="password" placeholder="Password" required></div>
+            <button class="submit-btn" type="submit">Admin Login</button>
+            <div class="form-message" id="adminMsg"></div>
+        </form>`;
+        document.getElementById('adminLoginForm').onsubmit = function(e) {
+            e.preventDefault();
+            const username = this.username.value.trim();
+            const password = this.password.value;
+            if (checkAdmin(username, password)) {
+                renderAdminPanel(username);
+            } else {
+                document.getElementById('adminMsg').textContent = 'Invalid admin credentials.';
+            }
+        };
+    }
+}
+function renderAdminPanel(adminUser) {
+    const content = document.getElementById('modalTabContent');
+    const customers = getCustomers();
+    content.innerHTML = `
+    <div style="margin-bottom:1rem;">
+        <b>Welcome, ${adminUser}</b>
+        <button class="admin-logout" onclick="showAppModal('admin')">Logout</button>
+    </div>
+    <div><b>Registered Customers (${customers.length})</b></div>
+    <table class="admin-table">
+        <tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>Location</th><th>Actions</th>
+        </tr>
+        ${customers.map(c=>`
+        <tr>
+            <td>${c.name}</td>
+            <td>${c.email}</td>
+            <td>${c.phone||''}</td>
+            <td>${c.location||''}</td>
+            <td>
+                <button class="admin-action-btn" onclick="removeCustomerAndRefresh(${c.id},'${adminUser}')">Delete</button>
+            </td>
+        </tr>
+        `).join('')}
+    </table>
+    <div style="margin-top:1.5rem;"><b>Recent Activity Log</b></div>
+    <div style="max-height:120px; overflow:auto; background:#f9fbe7; border-radius:8px; padding:0.5rem;">
+        ${getDB().logs.slice(-10).reverse().map(l=>`<div>[${l.time.slice(0,19).replace('T',' ')}] ${l.type} - ${l.user}</div>`).join('')}
+    </div>
+    `;
+}
+window.removeCustomerAndRefresh = function(id, adminUser) {
+    if (confirm('Delete this customer?')) {
+        removeCustomer(id);
+        renderAdminPanel(adminUser);
+    }
+};
+// --- Add App Button to Website ---
+(function(){
+    const btn = document.createElement('button');
+    btn.textContent = 'Customer Sign Up / Admin';
+    btn.style.position = 'fixed';
+    btn.style.bottom = '24px';
+    btn.style.right = '24px';
+    btn.style.background = '#388e3c';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '24px';
+    btn.style.padding = '1rem 2rem';
+    btn.style.fontWeight = 'bold';
+    btn.style.fontSize = '1.1rem';
+    btn.style.boxShadow = '0 4px 24px rgba(56,142,60,0.18)';
+    btn.style.cursor = 'pointer';
+    btn.style.zIndex = 1000;
+    btn.onmouseenter = ()=>btn.style.background='#8bc34a';
+    btn.onmouseleave = ()=>btn.style.background='#388e3c';
+    btn.onclick = ()=>showAppModal('signup');
+    document.body.appendChild(btn);
+})();
+</script>
